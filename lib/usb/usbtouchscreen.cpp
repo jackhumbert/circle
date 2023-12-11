@@ -130,9 +130,14 @@ void CUSBTouchScreenDevice::ReportHandler (const u8 *pReport, unsigned nReportSi
 {
 	assert (m_pDevice != 0);
 
-	if (   pReport == 0
-	    || nReportSize != m_Report.ByteSize)
+	if ( pReport == 0) {
+		LOGERR("No report");
+		return;
+	}
+
+	if ( nReportSize != m_Report.ByteSize)
 	{
+		LOGERR("Expected report (%d) size: %d, got: %d", m_Report.ReportID, m_Report.ByteSize, nReportSize);
 		return;
 	}
 
@@ -140,6 +145,7 @@ void CUSBTouchScreenDevice::ReportHandler (const u8 *pReport, unsigned nReportSi
 	if (   m_Report.ReportID != 0
 	    && pReport[0] != m_Report.ReportID)
 	{
+		LOGERR("Report ID mismatch");
 		return;
 	}
 
@@ -409,7 +415,10 @@ boolean CUSBTouchScreenDevice::DecodeReportDescriptor (const u8 *pDesc, unsigned
 
 		if (ucItem == HID_INPUT)
 		{
-			nBitOffset += nReportCount * nReportSize;
+			if (nReportID == 1) {
+				nBitOffset += nReportCount * nReportSize;
+				LOGNOTE("bitoffset: %d", nBitOffset);
+			}
 		}
 	}
 

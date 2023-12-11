@@ -275,10 +275,11 @@ CUSBFunction *CUSBDeviceFactory::GetGenericHIDDevice (CUSBFunction *pParent)
 		if (   ucItem == 0x04		// Usage Page (Digitizer)
 		    && nArg == 0x0D)
 		{
+			TempFunction.GetDevice ()->LogWrite (LogNotice, "Found Digitizer");
 			return new CUSBTouchScreenDevice (pParent);
 		}
 	}
-
+	TempFunction.GetDevice ()->LogWrite (LogError, "Found GamePad");
 	return new CUSBGamePadStandardDevice (pParent);
 }
 
