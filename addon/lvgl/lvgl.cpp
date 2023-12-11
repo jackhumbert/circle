@@ -26,6 +26,8 @@
 #include <circle/util.h>
 #include <circle/new.h>
 
+LOGMODULE ("lvgl");
+
 CLVGL *CLVGL::s_pThis = 0;
 
 CLVGL::CLVGL (CScreenDevice *pScreen, CInterruptSystem *pInterrupt)
@@ -136,19 +138,16 @@ boolean CLVGL::Initialize (void)
 		}
 	}
 
-	if (m_pMouseDevice == 0)
+	m_pTouchScreen = (CTouchScreenDevice *) CDeviceNameService::Get ()->GetDevice ("touch1", FALSE);
+	if (m_pTouchScreen != 0)
 	{
-		m_pTouchScreen = (CTouchScreenDevice *) CDeviceNameService::Get ()->GetDevice ("touch1", FALSE);
-		if (m_pTouchScreen != 0)
+		const unsigned *pCalibration = CKernelOptions::Get ()->GetTouchScreen ();
+		if (pCalibration != 0)
 		{
-			const unsigned *pCalibration = CKernelOptions::Get ()->GetTouchScreen ();
-			if (pCalibration != 0)
-			{
-				m_pTouchScreen->SetCalibration (pCalibration, nWidth, nHeight);
-			}
-
-			m_pTouchScreen->RegisterEventHandler (TouchScreenEventHandler);
+			m_pTouchScreen->SetCalibration (pCalibration, nWidth, nHeight);
 		}
+
+		m_pTouchScreen->RegisterEventHandler (TouchScreenEventHandler);
 	}
 
 	static lv_indev_drv_t indev_drv;
@@ -184,6 +183,22 @@ void CLVGL::Update (boolean bPlugAndPlayUpdated)
 		}
 	}
 
+	if (bPlugAndPlayUpdated && m_pTouchScreen == 0) {
+		m_pTouchScreen = (CTouchScreenDevice *) CDeviceNameService::Get ()->GetDevice ("touch1", FALSE);
+		if (m_pTouchScreen != 0)
+		{
+			size_t nWidth = m_pFrameBuffer->GetWidth ();
+			size_t nHeight = m_pFrameBuffer->GetHeight ();
+			const unsigned *pCalibration = CKernelOptions::Get ()->GetTouchScreen ();
+			if (pCalibration != 0)
+			{
+				m_pTouchScreen->SetCalibration (pCalibration, nWidth, nHeight);
+			}
+
+			m_pTouchScreen->RegisterEventHandler (TouchScreenEventHandler);
+		}
+	}
+
 	unsigned nTicks = CTimer::Get ()->GetClockTicks ();
 	if (nTicks - m_nLastUpdate >= 5*CLOCKHZ/1000)
 	{
@@ -196,7 +211,8 @@ void CLVGL::Update (boolean bPlugAndPlayUpdated)
 	{
 		m_pMouseDevice->UpdateCursor ();
 	}
-	else if (m_pTouchScreen != 0)
+	
+	if (m_pTouchScreen != 0)
 	{
 		if (nTicks - m_nLastTouchUpdate >= CLOCKHZ/60)
 		{
@@ -289,6 +305,8 @@ void CLVGL::TouchScreenEventHandler (TTouchScreenEvent Event, unsigned nID,
 					  unsigned nPosX, unsigned nPosY)
 {
 	assert (s_pThis != 0);
+
+	LOGNOTE("touch x: %d, y: %d", nPosX, nPosY);
 
 	switch (Event)
 	{
