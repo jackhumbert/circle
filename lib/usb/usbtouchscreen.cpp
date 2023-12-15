@@ -413,12 +413,10 @@ boolean CUSBTouchScreenDevice::DecodeReportDescriptor (const u8 *pDesc, unsigned
 			break;
 		}
 
-		if (ucItem == HID_INPUT)
+		if (   ucItem == HID_INPUT
+		    && nReportID == m_Report.ReportID)
 		{
-			if (nReportID == 1) {
 				nBitOffset += nReportCount * nReportSize;
-				LOGNOTE("bitoffset: %d", nBitOffset);
-			}
 		}
 	}
 
