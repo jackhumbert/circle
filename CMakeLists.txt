@@ -124,6 +124,15 @@ ${CMAKE_CURRENT_SOURCE_DIR}/addon/linux/sprintf.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/linux/pthread.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/linux/kthread.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/linux/mutex.cpp
+
+${CMAKE_CURRENT_SOURCE_DIR}/addon/fatfs/diskio.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/fatfs/ff.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/fatfs/ffsystem.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/fatfs/ffunicode.c
+
+${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/emmc.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/mmchost.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/sdhost.cpp
 )
 
 add_library(circle STATIC ${SOURCES} ${S_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/addon/lvgl/lvgl.cpp)
