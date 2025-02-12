@@ -133,6 +133,58 @@ ${CMAKE_CURRENT_SOURCE_DIR}/addon/fatfs/ffunicode.c
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/emmc.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/mmchost.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/addon/SDCard/sdhost.cpp
+
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/bcm4343.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/ether4330.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/emmc.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9arch.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9chan.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9cmd.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9error.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9ether.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9proc.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/p9util.cpp
+
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/blacklist.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/config.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/config_file_circle.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/events.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/main_circle.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/notify.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/scan.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/wpa_supplicant.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/wpas_glue.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/wpa_supplicant/wpasupplicant.cpp
+
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/common/wpa_common.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/aes-internal-dec.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/aes-internal.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/aes-unwrap.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/md5-internal.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/md5.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/rc4.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/sha1-internal.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/sha1-pbkdf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/sha1.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto/tls_none.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/drivers/drivers.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/drivers/driver_circle.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/drivers/scan_helpers.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/eapol_supp/eapol_supp_sm.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/eap_common/eap_common.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/eap_peer/eap.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/eap_peer/eap_methods.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/l2_packet/l2_packet_circle.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/rsn_supp/pmksa_cache.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/rsn_supp/preauth.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/rsn_supp/wpa.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/rsn_supp/wpa_ie.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/base64.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/common.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/eloop_circle.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/os_circle.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/wpa_debug.c
+${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils/wpabuf.c
 )
 
 add_library(circle STATIC ${SOURCES} ${S_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/addon/lvgl/lvgl.cpp)
@@ -145,6 +197,11 @@ target_include_directories(circle PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/app/lib 
     ${CMAKE_CURRENT_SOURCE_DIR}/addon/vc4 
     ${CMAKE_CURRENT_SOURCE_DIR}/addon/vc4/interface/khronos/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/crypto
+    ${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/rsn_supp
+    ${CMAKE_CURRENT_SOURCE_DIR}/addon/wlan/hostap/src/utils
 )
 
 target_compile_options(circle PUBLIC
@@ -180,6 +237,9 @@ target_compile_definitions(circle PUBLIC
     USB_GADGET_VENDOR_ID=0xFEED
     KERNEL_MAX_SIZE=0x8000000
     ARM_ALLOW_MULTI_CORE
+
+    CONFIG_DRIVER_CIRCLE
+    IEEE8021X_EAPOL
     # LEAVE_QEMU_ON_HALT
     # KERNEL_STACK_SIZE=0x800000
     # NDEBUG
